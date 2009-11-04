@@ -14,7 +14,7 @@ class Scope
     scope = self
     @app.send(http_method, scope.pattern + pattern) do |*args|
       # run the scope block
-      self.instance_exec(*args[0..scope.block.arity], &scope.block)
+      self.instance_exec(*args[0...scope.block.arity], &scope.block)
       # run the action block
       self.instance_exec(*args[scope.block.arity..-1], &blk)
     end
@@ -30,34 +30,34 @@ class Scope
   
 end
 
-def scope(pattern = nil, &blk)
-  Scope.new Sinatra::Application, pattern, &blk
-end
-
 module Sinatra
   
   module ScopeBuilder
     
     def scope(name, pattern = nil, &blk)
-      Scope.new Sinatra::Application, pattern, &blk
+      @scopes ||= {}
+      @scopes[name] = Scope.new Sinatra::Application, pattern, &blk
     end
     
-    
+    # hacky? I can't figure out which object to #define_method on
+    def method_missing(name)
+      return super unless @scopes.has_key? name
+      @scopes[name]
+    end
     
   end
 
   register ScopeBuilder
 end
 
-Projects = {
-  'a' => "Project A", 'b' => "Project B"
-}
+Projects = {'a' => 'Project A', 'b' => 'Project B'}
+Users = {'1' => 'User 1', '2' => 'User 2'}
 
-# TODO: change api to scope(:project, 'pattern', &blk)
-project = scope '/projects/*' do |project_code|
-  @project = Projects[project_code]
+scope :project, '/projects/*' do |project_id|
+  @project = Projects[project_id]
 end
 
-project.get '/edit' do
-  "Editing: #{@project}"
+project.get '/users/*' do |user_id|
+  @user = Users[user_id]
+  "#{@project}, #{@user}"
 end

@@ -10,6 +10,7 @@ eg.helpers do
 end
 
 eg "Requesting an action built from a scope" do
-  get('/projects/a/edit').body
+  Check(get('/projects/a/users/2').body).is('Project A, User 2')
+  Check(get('/projects/b/users/1').body).is('Project B, User 1')
 end
 
