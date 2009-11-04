@@ -18,8 +18,6 @@ end
 
 task :default => [:test]
 
-task :examples do
-  ruby "examples.rb"
-end
+task(:examples) { ruby "examples.rb" }
 
 task :test => :examples
