@@ -1,7 +1,8 @@
-require 'exemplor'
-
-require 'app'
+$:.unshift 'lib'
+require 'example_app'
 set :environment, :test
+
+require 'exemplor'
 require 'rack/test'
 
 eg.helpers do
@@ -14,3 +15,6 @@ eg "Requesting an action built from a scope" do
   Check(get('/projects/b/users/1').body).is('Project B, User 1')
 end
 
+eg "Scope with no path pattern" do
+  Check(get('/sekret/squirrel').body).is('squirrel')
+end
