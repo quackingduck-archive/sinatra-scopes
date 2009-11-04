@@ -19,3 +19,8 @@ Scopes don't have to specify a path pattern:
     authorized.get '/sekret/*' do |page|
       page
     end
+
+Similar Implementations
+-----------------------
+
+[dcparker](http://github.com/dcparker) - [cilantro/lib/cilantro/controller.rb](http://github.com/dcparker/cilantro/blob/d6adede43e380688349ffecd7189e8a2d2b82df3/lib/cilantro/controller.rb)
