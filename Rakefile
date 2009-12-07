@@ -1,3 +1,5 @@
+task :default => :examples
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
@@ -16,8 +18,10 @@ rescue LoadError
   puts "Install jeweler to build gem"
 end
 
-task :default => [:test]
-
 task(:examples) { ruby "examples.rb" }
-
 task :test => :examples
+
+task :tag_version do 
+  version = File.read('VERSION')
+  system "git tag -a v#{version} -m v#{version}"
+end
