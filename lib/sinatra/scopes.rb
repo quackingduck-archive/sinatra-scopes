@@ -32,15 +32,15 @@ module Sinatra
   
   module ScopeBuilder
     
-    def scope(name, pattern = nil, &blk)
+    def scopes
       @scopes ||= {}
-      @scopes[name] = Scope.new Sinatra::Application, pattern, &blk
     end
     
-    # hacky? I can't figure out which object to #define_method on
-    def method_missing(name)
-      return super unless @scopes.has_key? name
-      @scopes[name]
+    def scope(name, pattern = nil, &blk)
+      scopes[name] = Scope.new self, pattern, &blk
+      mod = Module.new
+      mod.module_eval %{def #{name}; scopes[:#{name}] end}
+      register mod
     end
     
   end
