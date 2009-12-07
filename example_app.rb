@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'sinatra/scopes'
+require 'lib/sinatra/scopes'
 
 Project = {'a' => 'Project A', 'b' => 'Project B'}
 User = {'1' => 'User 1', '2' => 'User 2'}
